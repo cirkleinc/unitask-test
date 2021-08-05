@@ -14,9 +14,9 @@ const {
  * @param {*} next 
  * @returns 
  */
-const randomJoke = (req, res, next) => {
+const randomJoke = async (req, res, next) => {
     try {
-        const data = jokeService.getRandomJoke();
+        const data = await jokeService.getRandomJoke();
 
         return res.send({
             data,

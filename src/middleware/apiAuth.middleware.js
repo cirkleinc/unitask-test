@@ -31,15 +31,18 @@ const {
  */
 const apiAuthMiddleware = async (req, res, next) => {
     try {
-        const token = req.headers.authorization || false;
-        if (token) {
+        let token = req.headers.authorization || false;
+        if (token && token.startsWith("Bearer ")) {
+            token = token.slice(7, token.length);
             const decodedToken = await decodeUserToken(token);
             const _userId = decodedToken._userId || false;
 
             if (_userId) {
-                const user = await findOneUser(_userId);
-
-                if (user) {
+                const userQuery = {
+                    _id: _userId
+                };
+                const user = await findOneUser(userQuery);
+                if (user && user.token === token) {
                     req._userId = _userId;
                     return next();
                 }

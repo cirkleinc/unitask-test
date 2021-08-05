@@ -28,4 +28,4 @@ const apiResponseMiddleware = (body, req, res) => {
     return apiResponse;
 };
 
-module.exports = apiResponseMiddleware;
+module.exports = mung.json(apiResponseMiddleware);

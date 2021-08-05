@@ -6,6 +6,10 @@
 const {
     userService,
 } = require('../../src/services');
+const {
+    userLoginSchema,
+    userSignupSchema,
+} = require('../../src/constants/joiSchemas.constants');
 
 /**
  * User login API
@@ -14,10 +18,16 @@ const {
  * @param {*} next 
  * @returns 
  */
-const userLogin = (req, res, next) => {
+const userLogin = async (req, res, next) => {
     try {
-        console.log("userLogin :: ")
-        const data = userService.userLogin(req.body);
+        const {
+            error,
+        } = userLoginSchema.validate(req.body);
+
+        if (error && error !== null)
+            throw new Error(error);
+
+        const data = await userService.userLogin(req.body);
 
         return res.send({
             data,
@@ -34,9 +44,16 @@ const userLogin = (req, res, next) => {
  * @param {*} next 
  * @returns 
  */
-const userSignup = (req, res, next) => {
+const userSignup = async (req, res, next) => {
     try {
-        const data = userService.userSignup(req.body);
+        const {
+            error,
+        } = userSignupSchema.validate(req.body);
+
+        if (error && error !== null)
+            throw new Error(error);
+
+        const data = await userService.userSignup(req.body);
 
         return res.send({
             data,
@@ -53,9 +70,9 @@ const userSignup = (req, res, next) => {
  * @param {*} next 
  * @returns 
  */
-const userLogout = (req, res, next) => {
+const userLogout = async (req, res, next) => {
     try {
-        const data = userService.userLogout(req._userId);
+        const data = await userService.userLogout(req._userId);
 
         return res.send({
             data,
@@ -72,9 +89,9 @@ const userLogout = (req, res, next) => {
  * @param {*} next 
  * @returns 
  */
-const userProfile = (req, res, next) => {
+const userProfile = async (req, res, next) => {
     try {
-        const data = userService.userProfile(req._userId);
+        const data = await userService.userProfile(req._userId);
 
         return res.send({
             data,

@@ -11,6 +11,11 @@ const {
     jwtSecret,
 } = require('../../../config');
 
+/**
+ * Decode user api token
+ * @param {*} token 
+ * @returns 
+ */
 const decodeUserToken = (token) => {
     try {
         const decodedToken = jwt.verify(token, jwtSecret);
@@ -21,6 +26,24 @@ const decodeUserToken = (token) => {
     }
 };
 
+/**
+ * Generate user api token
+ * @param {*} _userId 
+ * @returns 
+ */
+const generateUserToken = (_userId) => {
+    try {
+        const generateToken = jwt.sign({
+            _userId
+        }, jwtSecret);
+
+        return generateToken;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     decodeUserToken,
+    generateUserToken,
 };

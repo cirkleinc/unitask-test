@@ -7,7 +7,7 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 
-const app = new express();
+const app = express();
 const server = http.createServer(app);
 
 const {
@@ -28,17 +28,25 @@ const routes = require('./routes');
 /**
  * Set app middleware
  */
-app.use(apiResponseMiddleware)
-    .use(cors())
-    .use(express.json())
-    .use(express.urlencoded({
-        extended: true
-    }))
-    .use(apiLoggerMiddleware)
-    .use(routes)
-    .use(apiNotFoundMiddleware)
-    .use(errorHandlerMiddleware)
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+app.use(apiLoggerMiddleware());
+app.use(apiResponseMiddleware);
+app.use('/api', routes);
+app.use(apiNotFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
+/**
+ * Mongodb Connection
+ */
+require('./include/db.connection');
+
+/**
+ * Server listen on port
+ */
 server.listen(port, () => {
     appLogger.info(`Unitask server listening on ${port} in ${env} mode`)
 });
